@@ -1,0 +1,3 @@
+rootProject.name='ImageMinifier'
+include ':sample'
+include ':minifier'
