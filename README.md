@@ -1,7 +1,7 @@
 # Image Minifier
 ![](minifier_logo.png)
 
-Minifier is a lightweight android library for image resizing, format changing and quality focusing in reduce file size.
+Minifier is a lightweight (**21KB**) android library for image resizing, format changing and quality focusing in reduce file size.
 ## How it works?
 With an image file, apply one or multiples transformations:
 ```kotlin
