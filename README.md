@@ -1,4 +1,7 @@
 # Image Minifier
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dc71549baf8f479b8586ef00a98b5fd4)](https://app.codacy.com/gh/jeziellago/image-minifier?utm_source=github.com&utm_medium=referral&utm_content=jeziellago/image-minifier&utm_campaign=Badge_Grade)
+
 ![](minifier_logo.png)
 
 Minifier is a lightweight (**21KB**) android library for image resizing, format changing and quality focusing in reduce file size.
