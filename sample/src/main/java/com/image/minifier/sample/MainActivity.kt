@@ -24,7 +24,6 @@ import com.image.minifier.getAsBitmap
 import com.image.minifier.resize
 import kotlinx.android.synthetic.main.activity_main.image
 import kotlinx.android.synthetic.main.activity_main.txtDescription
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.FileOutputStream
@@ -49,11 +48,12 @@ class MainActivity : AppCompatActivity() {
                     resize(1200, 1200)
                     colorGrayScale()
                 }
-                .minify()
-                .collect { minified ->
-                    txtDescription.text = "Original: $originalSize kb\n" +
-                            "After minifier: ${minified.length() / 1024} kb"
-                    image.setImageBitmap(minified.getAsBitmap())
+                .minify {
+                        onSuccess { minified ->
+                            txtDescription.text = "Original: $originalSize kb\n" +
+                                    "After minifier: ${minified.length() / 1024} kb"
+                            image.setImageBitmap(minified.getAsBitmap())
+                        }
                 }
         }
     }

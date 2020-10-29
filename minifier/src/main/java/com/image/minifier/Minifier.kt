@@ -24,7 +24,8 @@ import com.image.minifier.transformation.GrayScaleTransformation
 import com.image.minifier.transformation.ImageTransformation
 import com.image.minifier.transformation.QualityTransformation
 import com.image.minifier.transformation.ResizeTransformation
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import java.io.File
 
 interface Minifier {
@@ -37,9 +38,9 @@ interface Minifier {
 
     fun addTransformations(transformations: Minifier.() -> Unit): Minifier
 
-    fun minify(onSuccess: (File) -> Unit, onError: (Throwable) -> Unit)
+    fun minify(result: Result<File>.() -> Unit)
 
-    fun minify(): Flow<File>
+    suspend fun minify(dispatcher: CoroutineDispatcher = Dispatchers.Default): File
 }
 
 fun Minifier.resize(width: Int, height: Int) {

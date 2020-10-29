@@ -20,16 +20,11 @@ import android.net.Uri
 import androidx.annotation.WorkerThread
 import com.image.minifier.transformation.ImageTransformation
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.properties.Delegates
 
-internal class MinifierImpl internal constructor(
-    private val context: Context,
-    private val dispatcher: CoroutineDispatcher
-) : Minifier {
+internal class MinifierImpl internal constructor(context: Context) : Minifier {
 
     private var imageFile: File by Delegates.notNull()
 
@@ -54,14 +49,12 @@ internal class MinifierImpl internal constructor(
     }
 
     @WorkerThread
-    override fun minify(onSuccess: (File) -> Unit, onError: (Throwable) -> Unit) = try {
-        onSuccess(minifyImage())
-    } catch (e: Throwable) {
-        onError(e)
+    override fun minify(result: Result<File>.() -> Unit) {
+        result(runCatching { minifyImage() })
     }
 
-    override fun minify(): Flow<File> = flow { emit(minifyImage()) }
-        .flowOn(dispatcher)
+    override suspend fun minify(dispatcher: CoroutineDispatcher): File =
+        withContext(dispatcher) { minifyImage() }
 
     private fun minifyImage(): File {
         require(transformations.isNotEmpty()) { "Minifier require any transformation to work." }

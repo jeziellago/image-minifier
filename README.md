@@ -1,4 +1,5 @@
 # Image Minifier
+![CI](https://github.com/jeziellago/image-minifier/workflows/CI/badge.svg?branch=master)  [![Codacy Badge](https://app.codacy.com/project/badge/Grade/fb95312d03504525b38f4789a3ae58d3)](https://www.codacy.com/gh/jeziellago/image-minifier/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jeziellago/image-minifier&amp;utm_campaign=Badge_Grade)
 ![](minifier_logo.png)
 
 Minifier is a lightweight (**21KB**) android library for image resizing, format changing and quality focusing in reduce file size.
@@ -11,26 +12,21 @@ MinifierFactory.create(context)
         resize(1200, 720)
         convertTo(CompressFormat.JPEG)
     }
-    .minify({ minified ->
-        /* success */
-    }, { error ->
-        /* error */
-    })
+    .minify {
+        onSuccess { minified -> /* success */ }
+        onFailure { error -> /* failure */ }
+    }
         
 ```
-### Using Kotlin Flow
+or use coroutines:
 ```kotlin
-MinifierFactory.create(context)
+val minifiedFile: File = MinifierFactory.create(context)
     .withImage(originalFile)
     .addTransformations {
         resize(1200, 720)
         convertTo(CompressFormat.JPEG)
     }
-    .minify()
-    .catch { /* error */ }
-    .collect { minified -> 
-       /* success */
-    }
+    .minify(Dispatchers.IO)
 ```
 ## Transformations
 - Resize
@@ -62,6 +58,6 @@ allprojects {
 - Module `build.gradle`
 ```
 dependencies {
-    implementation 'com.github.jeziellago:image-minifier:0.1.0'
+    implementation 'com.github.jeziellago:image-minifier:0.1.1'
 }
 ```

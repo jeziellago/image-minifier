@@ -16,14 +16,9 @@
 package com.image.minifier
 
 import android.content.Context
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 
 object MinifierFactory {
 
     @JvmStatic
-    fun create(
-        context: Context,
-        dispatcher: CoroutineDispatcher = Dispatchers.Default
-    ): Minifier = MinifierImpl(context, dispatcher)
+    fun create(context: Context): Minifier = MinifierImpl(context)
 }
