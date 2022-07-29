@@ -24,14 +24,13 @@ import java.io.FileOutputStream
 
 internal fun Bitmap.CompressFormat.toFileExtension() = when (this) {
     Bitmap.CompressFormat.PNG -> ".png"
-    Bitmap.CompressFormat.WEBP -> ".webp"
     Bitmap.CompressFormat.JPEG -> ".jpg"
+    else -> throw IllegalArgumentException("Invalid compression format: $this")
 }
 
 internal fun File.getExtensionAsBitmapFormat(): Bitmap.CompressFormat {
     return when (this.extension) {
         "png" -> Bitmap.CompressFormat.PNG
-        "webp" -> Bitmap.CompressFormat.WEBP
         "jpeg", "jpg" -> Bitmap.CompressFormat.JPEG
         else -> throw IllegalArgumentException("Invalid extension to Bitmap: ${this.extension}")
     }

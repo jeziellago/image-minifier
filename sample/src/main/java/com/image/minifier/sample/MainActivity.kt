@@ -16,14 +16,18 @@
 package com.image.minifier.sample
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.image.minifier.MinifierFactory
 import com.image.minifier.colorGrayScale
 import com.image.minifier.getAsBitmap
 import com.image.minifier.resize
-import kotlinx.android.synthetic.main.activity_main.image
-import kotlinx.android.synthetic.main.activity_main.txtDescription
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.FileOutputStream
@@ -48,13 +52,13 @@ class MainActivity : AppCompatActivity() {
                     resize(1200, 1200)
                     colorGrayScale()
                 }
-                .minify {
-                        onSuccess { minified ->
-                            txtDescription.text = "Original: $originalSize kb\n" +
-                                    "After minifier: ${minified.length() / 1024} kb"
-                            image.setImageBitmap(minified.getAsBitmap())
-                        }
-                }
+                .minifyWith(Dispatchers.Default)
+                .onSuccess { minified ->
+                    findViewById<TextView>(R.id.txtDescription).text =
+                        "Original: $originalSize kb\n" +
+                                "After minifier: ${minified.length() / 1024} kb"
+                    findViewById<ImageView>(R.id.image).setImageBitmap(minified.getAsBitmap())
+                }.onFailure { findViewById<TextView>(R.id.txtDescription).text = "Error: $it" }
         }
     }
 

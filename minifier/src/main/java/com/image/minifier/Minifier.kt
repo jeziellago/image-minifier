@@ -41,6 +41,8 @@ interface Minifier {
     fun minify(result: Result<File>.() -> Unit)
 
     suspend fun minify(dispatcher: CoroutineDispatcher = Dispatchers.Default): File
+
+    suspend fun minifyWith(dispatcher: CoroutineDispatcher): Result<File>
 }
 
 fun Minifier.resize(width: Int, height: Int) {

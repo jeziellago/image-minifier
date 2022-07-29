@@ -17,7 +17,6 @@ package com.image.minifier
 
 import android.content.Context
 import android.net.Uri
-import androidx.annotation.WorkerThread
 import com.image.minifier.transformation.ImageTransformation
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -48,13 +47,16 @@ internal class MinifierImpl internal constructor(context: Context) : Minifier {
         transformations.add(transformation)
     }
 
-    @WorkerThread
     override fun minify(result: Result<File>.() -> Unit) {
         result(runCatching { minifyImage() })
     }
 
     override suspend fun minify(dispatcher: CoroutineDispatcher): File =
         withContext(dispatcher) { minifyImage() }
+
+    override suspend fun minifyWith(dispatcher: CoroutineDispatcher): Result<File> {
+        return runCatching { withContext(dispatcher) { minifyImage() } }
+    }
 
     private fun minifyImage(): File {
         require(transformations.isNotEmpty()) { "Minifier require any transformation to work." }
